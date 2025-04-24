@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table with Popup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1>Table View</h1>
+            <table>
+                <thead>
+                    <tr>
+                        {% for header in headers %}
+                            <th>{{ header }}</th>
+                        {% endfor %}
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            {% for cell in row %}
+                                <td>{{ cell }}</td>
+                            {% endfor %}
+                            <td>
+                                <!-- Form for submitting the selected row -->
+                                <form method="POST" style="display:inline;">
+                                    <input type="hidden" name="row_index" value="{{ loop.index0 }}">
+                                    <button type="submit" class="action-button">View</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Popup Section -->
+            {% if selected_row %}
+                <div class="popup">
+                    <div class="popup-content">
+                        <h2>Row Details</h2>
+                        <ul>
+                            {% for header, cell in zip(headers, selected_row) %}
+                                <li><strong>{{ header }}:</strong> {{ cell }}</li>
+                            {% endfor %}
+                        </ul>
+                        <a href="/" class="close-button">Close</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
